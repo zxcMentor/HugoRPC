@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  hugo:
+    image: klakegg/hugo:0.101.0-ext-alpine
+    container_name: hugos
+    command: server
+    entrypoint: hugo
+    volumes:
+      - "./hugo:/src"
+    ports:
+      - "1313:1313"
+    networks:
+        - mylocal
+  app:
+    build: ./proxy
+    container_name: proxys
+    env_file:
+      - .env
+    volumes:
+      - "./hugo/content:/app/static"
+    ports:
+      - "8080:8080"
+    networks:
+        - mylocal
+  rpc:
+    build: ./rpcserver
+    container_name: rpc
+    ports:
+      - "1234:1234"
+    networks:
+      - mylocal
+  grpc:
+    build: ./grpc
+    container_name: grpc
+    ports:
+      - "50051:50051"
+    networks:
+      - mylocal
+networks:
+    mylocal:
+        driver: bridge
