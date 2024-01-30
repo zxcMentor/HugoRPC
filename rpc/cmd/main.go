@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
-	"rpcserver/internal/service"
+	"rpc/internal/service"
 )
 
 func main() {

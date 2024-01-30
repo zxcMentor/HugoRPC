@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"json-rpc/internal/models"
 	"log"
 	"net/http"
-	"rpc/internal/models"
 )
 
 type GeoProvide struct {

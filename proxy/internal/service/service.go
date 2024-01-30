@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"proxy/internal/models"
-	"proxy/internal/rpc/grpcClient"
 	"proxy/internal/rpc/rpcClient"
 )
 
@@ -22,23 +21,32 @@ func NewGeoService() GeoService {
 }
 
 func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
+
 	protocol := os.Getenv("RPC_PROTOCOL")
 
 	switch protocol {
 	case "rpc":
-		address, err := rpcClient.ConnectAndCallRpc(input)
+		rpcFactory := rpcClient.NewClientRpcFactory()
+		address, err := rpcFactory.CreateClientAndCall(input)
 		if err != nil {
 			log.Fatal("err:", err)
 			return nil, err
 		}
-		return address, err
-	case "json-rpc":
+		return address, nil
 
-	case "grpc":
-		address, err := grpcClient.ConnectAndCallGRPC(input)
+	case "json-rpc":
+		jsonrpcFactory := rpcClient.NewJsonRpcClientFactory()
+		address, err := jsonrpcFactory.CreateClientAndCall(input)
 		if err != nil {
 			log.Fatal("err:", err)
 			return nil, err
+		}
+		return address, nil
+	case "grpc":
+		grpcFactory := rpcClient.NewGrpcClientFactory()
+		address, err := grpcFactory.CreateClientAndCall(input)
+		if err != nil {
+			log.Fatal("err:", err)
 		}
 		return address, nil
 
@@ -47,5 +55,6 @@ func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
 }
 
 func (g *GeoService) GeoCode(lat, lng string) ([]*models.Address, error) {
+
 	return nil, nil
 }

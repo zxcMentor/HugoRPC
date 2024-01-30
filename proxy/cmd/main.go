@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"proxy/internal/controller"
@@ -9,11 +10,14 @@ import (
 )
 
 func main() {
-
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("err loading env:", err)
+	}
 	gs := service.NewGeoService()
 	gh := controller.NewGeoHand(&gs)
 	r := router.StRout(gh)
 
-	log.Println("serv 8080 started")
+	log.Println("proxy serv started on ports :8080")
 	http.ListenAndServe(":8080", r)
 }

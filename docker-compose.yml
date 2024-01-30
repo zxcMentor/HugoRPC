@@ -24,10 +24,17 @@ services:
     networks:
         - mylocal
   rpc:
-    build: rpc
-    container_name: rpcClient
+    build: ./rpc
+    container_name: rpc
     ports:
       - "1234:1234"
+    networks:
+      - mylocal
+  json-rpc:
+    build: ./json-rpc
+    container_name: json-rpc
+    ports:
+      - "4321:4321"
     networks:
       - mylocal
   grpc:
