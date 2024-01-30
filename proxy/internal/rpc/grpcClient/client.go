@@ -1,14 +1,14 @@
-package grpcclient
+package grpcClient
 
 import (
 	"context"
 	"google.golang.org/grpc"
 	"log"
-	"proxy/internal/grpcclient/proto"
 	"proxy/internal/models"
+	"proxy/internal/rpc/grpcClient/proto"
 )
 
-func CreateGRPCClient(input string) ([]*models.Address, error) {
+func ConnectAndCallGRPC(input string) ([]*models.Address, error) {
 	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Ошибка при подключении к серверу: %v", err)

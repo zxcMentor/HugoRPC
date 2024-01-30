@@ -1,4 +1,4 @@
-package rpcclient
+package rpcClient
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"proxy/internal/models"
 )
 
-func CreateRpcClient(input string) ([]*models.Address, error) {
+func ConnectAndCallRpc(input string) ([]*models.Address, error) {
 	client, err := rpc.Dial("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal("err:", err)
