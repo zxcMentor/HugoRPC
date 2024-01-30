@@ -11,9 +11,13 @@ import (
 	"net/http"
 )
 
-type GeoService struct {
+type GeoServicer interface {
+	GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error)
+	GeoAddressGeocode(ctx context.Context, req *pb.GeocodeRequest) (*pb.GeocodeResponse, error)
 	pb.UnimplementedGeoServiceServer
 }
+
+type GeoService struct{}
 
 func (g *GeoService) GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error) {
 
