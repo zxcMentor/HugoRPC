@@ -1,7 +1,7 @@
 package main
 
 import (
-	"json-rpc/internal/service"
+	"json-rpc/internal/jsonrpc/geo"
 	"log"
 	"net"
 	"net/http"
@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	geoProvider := new(service.GeoProvide)
+	geoProvider := new(geo.ServerGeo)
 	err := rpc.Register(geoProvider)
 	if err != nil {
 		panic(err)
