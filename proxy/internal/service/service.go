@@ -27,7 +27,7 @@ func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
 	switch protocol {
 	case "rpc":
 		rpcFactory := rpcClient.NewClientRpcFactory()
-		address, err := rpcFactory.CreateClientAndCall(input)
+		address, err := rpcFactory.CreateClientAndCallSearch(input)
 		if err != nil {
 			log.Fatal("err:", err)
 			return nil, err
@@ -36,7 +36,7 @@ func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
 
 	case "json-rpc":
 		jsonrpcFactory := rpcClient.NewJsonRpcClientFactory()
-		address, err := jsonrpcFactory.CreateClientAndCall(input)
+		address, err := jsonrpcFactory.CreateClientAndCallSearch(input)
 		if err != nil {
 			log.Fatal("err:", err)
 			return nil, err
@@ -44,7 +44,7 @@ func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
 		return address, nil
 	case "grpc":
 		grpcFactory := rpcClient.NewGrpcClientFactory()
-		address, err := grpcFactory.CreateClientAndCall(input)
+		address, err := grpcFactory.CreateClientAndCallSearch(input)
 		if err != nil {
 			log.Fatal("err:", err)
 		}

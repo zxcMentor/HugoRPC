@@ -10,7 +10,8 @@ import (
 )
 
 type ClientFactoryRpc interface {
-	CreateClientAndCall(input string) ([]*models.Address, error)
+	CreateClientAndCallSearch(input string) ([]*models.Address, error)
+	CreateClientAndCallGeocode(lat, lon string) ([]*models.Address, error)
 }
 
 type ClientGrpcFactory struct{}
@@ -19,7 +20,7 @@ func NewGrpcClientFactory() *ClientGrpcFactory {
 	return &ClientGrpcFactory{}
 }
 
-func (f *ClientGrpcFactory) CreateClientAndCall(input string) ([]*models.Address, error) {
+func (f *ClientGrpcFactory) CreateClientAndCallSearch(input string) ([]*models.Address, error) {
 	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Ошибка при подключении к серверу: %v", err)
@@ -133,25 +134,35 @@ func (f *ClientGrpcFactory) CreateClientAndCall(input string) ([]*models.Address
 	return addresses, nil
 }
 
+func (f *ClientGrpcFactory) CreateClientAndCallGeocode(lat, lon string) ([]*models.Address, error) {
+	//TODO implement me
+	return nil, nil
+}
+
 type ClientJsonRpcFactory struct{}
 
 func NewJsonRpcClientFactory() *ClientJsonRpcFactory {
 	return &ClientJsonRpcFactory{}
 }
 
-func (f *ClientJsonRpcFactory) CreateClientAndCall(input string) ([]*models.Address, error) {
+func (f *ClientJsonRpcFactory) CreateClientAndCallSearch(input string) ([]*models.Address, error) {
 	client, err := rpc.DialHTTP("tcp", "localhost:4321")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var address []*models.Address
-	err = client.Call("GeoProvide.SearchGeoAddress", input, &address)
+	err = client.Call("ServerGeo.SearchGeoAddress", input, &address)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return address, err
+}
+
+func (f *ClientJsonRpcFactory) CreateClientAndCallGeocode(lat, lon string) ([]*models.Address, error) {
+	//TODO implement me
+	return nil, nil
 }
 
 type ClientRpcFactory struct {
@@ -161,17 +172,22 @@ func NewClientRpcFactory() *ClientRpcFactory {
 	return &ClientRpcFactory{}
 }
 
-func (f *ClientRpcFactory) CreateClientAndCall(input string) ([]*models.Address, error) {
+func (f *ClientRpcFactory) CreateClientAndCallSearch(input string) ([]*models.Address, error) {
 	client, err := rpc.Dial("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal("err:", err)
 		return nil, err
 	}
 	var address []*models.Address
-	err = client.Call("GeoProvider.SearchGeoAddress", input, address)
+	err = client.Call("ServerGeo.SearchGeoAddress", input, address)
 	if err != nil {
 		log.Fatal("err:", err)
 		return nil, err
 	}
 	return address, nil
+}
+
+func (f *ClientRpcFactory) CreateClientAndCallGeocode(lat, lon string) ([]*models.Address, error) {
+	//TODO implement me
+	return nil, nil
 }

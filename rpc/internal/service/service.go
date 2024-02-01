@@ -13,7 +13,7 @@ import (
 type GeoProvide struct {
 }
 
-func (g *GeoProvide) SearchGeoAddress(args string, reply *[]*models.Address) error {
+func (g *GeoProvide) SearchGeoAddress(args string) (*[]*models.Address, error) {
 	sreq := models.SearchRequest{Query: args}
 	jsd, _ := json.Marshal(sreq)
 
@@ -34,17 +34,23 @@ func (g *GeoProvide) SearchGeoAddress(args string, reply *[]*models.Address) err
 	log.Println(resp.StatusCode)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return fmt.Errorf("error reading body: %v", err)
+		return nil, fmt.Errorf("error reading body: %v", err)
 	}
 
 	var sugg models.SearchResponse
 	err = json.Unmarshal(body, &sugg)
 	if err != nil {
-		return fmt.Errorf("error unmarshalling response: %v", err)
+		return nil, fmt.Errorf("error unmarshalling response: %v", err)
 	}
+	reply := &[]*models.Address{}
 	for _, s := range sugg.Suggestions {
 		*reply = append(*reply, s.Data)
 	}
 
+	return reply, nil
+}
+
+func (g *GeoProvide) GeocodeAddress() error {
+	//TODO implement me
 	return nil
 }

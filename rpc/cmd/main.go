@@ -4,11 +4,12 @@ import (
 	"log"
 	"net"
 	"net/rpc"
-	"rpc/internal/service"
+	"rpc/internal/rpc/geo"
 )
 
 func main() {
-	geoProvider := new(service.GeoProvide)
+
+	geoProvider := new(geo.ServerGeo)
 	err := rpc.Register(geoProvider)
 	if err != nil {
 		panic(err)

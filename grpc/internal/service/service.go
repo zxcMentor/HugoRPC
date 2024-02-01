@@ -1,9 +1,8 @@
 package service
 
 import (
-	pb "HUGO/grpc/proto"
+	"HUGO/grpc/internal/models"
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,17 +10,11 @@ import (
 	"net/http"
 )
 
-type GeoServicer interface {
-	GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error)
-	GeoAddressGeocode(ctx context.Context, req *pb.GeocodeRequest) (*pb.GeocodeResponse, error)
-	pb.UnimplementedGeoServiceServer
+type GeoService struct {
 }
 
-type GeoService struct{}
-
-func (g *GeoService) GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error) {
-
-	jsd, err := json.Marshal(request.Input)
+func (g *GeoService) GeoSearch(input string) ([]*models.Address, error) {
+	jsd, err := json.Marshal(input)
 	if err != nil {
 		log.Fatal("err marshaling:", err)
 	}
@@ -46,15 +39,19 @@ func (g *GeoService) GeoAddressSearch(ctx context.Context, request *pb.GeoAddres
 		return nil, fmt.Errorf("error reading body: %v", err)
 	}
 
-	var sugg pb.GeoAddressResponse
+	var sugg models.SearchResponse
 	err = json.Unmarshal(body, &sugg)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling response: %v", err)
 	}
-
-	return &pb.GeoAddressResponse{Addresses: sugg.Addresses}, nil
+	var address []*models.Address
+	for _, s := range sugg.Suggestions {
+		address = append(address, s.Data)
+	}
+	return address, nil
 }
 
-func (g *GeoService) GeoAddressGeocode(ctx context.Context, req *pb.GeocodeRequest) (*pb.GeocodeResponse, error) {
+func (g *GeoService) GeoCode(lat, lng string) ([]*models.Address, error) {
+
 	return nil, nil
 }

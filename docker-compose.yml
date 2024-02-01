@@ -15,8 +15,6 @@ services:
   app:
     build: ./proxy
     container_name: proxys
-    env_file:
-      - .env
     volumes:
       - "./hugo/content:/app/static"
     ports:
