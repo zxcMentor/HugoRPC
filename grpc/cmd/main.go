@@ -1,7 +1,7 @@
 package main
 
 import (
-	"HUGO/grpc/internal/service"
+	"HUGO/grpc/internal/grpc/geo"
 	pb "HUGO/grpc/proto"
 	"google.golang.org/grpc"
 	"log"
@@ -15,7 +15,7 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	pb.RegisterGeoServiceServer(server, &service.GeoService{})
+	pb.RegisterGeoServiceServer(server, &geo.ServiceGeo{})
 
 	log.Println("Запуск gRPC сервера...")
 	if err := server.Serve(listen); err != nil {

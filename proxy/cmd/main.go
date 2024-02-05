@@ -7,7 +7,6 @@ import (
 	_ "proxy/docs"
 	"proxy/internal/controller"
 	"proxy/internal/router"
-	"proxy/internal/service"
 )
 
 // @title Proxy Service API
@@ -20,8 +19,8 @@ func main() {
 	if err != nil {
 		log.Println("err loading env:", err)
 	}
-	gs := service.NewGeoService()
-	gh := controller.NewGeoHand(&gs)
+
+	gh := controller.NewGeoHand()
 	r := router.StRout(gh)
 
 	log.Println("proxy serv started on ports :8080")

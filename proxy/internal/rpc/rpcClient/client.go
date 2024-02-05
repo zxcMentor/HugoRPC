@@ -146,7 +146,7 @@ func NewJsonRpcClientFactory() *ClientJsonRpcFactory {
 }
 
 func (f *ClientJsonRpcFactory) CreateClientAndCallSearch(input string) ([]*models.Address, error) {
-	client, err := rpc.DialHTTP("tcp", "localhost:4321")
+	client, err := rpc.DialHTTP("tcp", "json-rpc:4321")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -172,16 +172,16 @@ func NewClientRpcFactory() *ClientRpcFactory {
 	return &ClientRpcFactory{}
 }
 
-func (f *ClientRpcFactory) CreateClientAndCallSearch(input string) ([]*models.Address, error) {
-	client, err := rpc.Dial("tcp", "localhost:1234")
+func (f *ClientRpcFactory) CreateClientAndCallSearch(input string) ([]byte, error) {
+	client, err := rpc.Dial("tcp", "rpc:1234")
 	if err != nil {
-		log.Fatal("err:", err)
+		log.Fatal("err dial:", err)
 		return nil, err
 	}
-	var address []*models.Address
-	err = client.Call("ServerGeo.SearchGeoAddress", input, address)
+	var address []byte
+	err = client.Call("ServerGeo.SearchGeoAddress", input, &address)
 	if err != nil {
-		log.Fatal("err:", err)
+		log.Fatal("err call:", err)
 		return nil, err
 	}
 	return address, nil

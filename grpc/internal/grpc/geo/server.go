@@ -13,12 +13,12 @@ type Geo interface {
 	GeoCode(lat, lng string) ([]*models.Address, error)
 }
 
-type GeoService struct {
+type ServiceGeo struct {
 	pb.UnimplementedGeoServiceServer
 	geo service.GeoService
 }
 
-func (g *GeoService) GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error) {
+func (g *ServiceGeo) GeoAddressSearch(ctx context.Context, request *pb.GeoAddressRequest) (*pb.GeoAddressResponse, error) {
 
 	address, err := g.geo.GeoSearch(request.Input)
 	if err != nil {
@@ -120,7 +120,7 @@ func (g *GeoService) GeoAddressSearch(ctx context.Context, request *pb.GeoAddres
 	return &pb.GeoAddressResponse{Addresses: grpcAddresses}, nil
 }
 
-func (g *GeoService) GeoAddressGeocode(ctx context.Context, req *pb.GeocodeRequest) (*pb.GeocodeResponse, error) {
+func (g *ServiceGeo) GeoAddressGeocode(ctx context.Context, req *pb.GeocodeRequest) (*pb.GeocodeResponse, error) {
 	//TODO implement me
 	return nil, nil
 }

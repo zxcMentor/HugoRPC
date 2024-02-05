@@ -2,12 +2,11 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"proxy/internal/models"
 	"proxy/internal/rpc/rpcClient"
-	"proxy/internal/service"
 )
 
 type GeoHandler interface {
@@ -16,12 +15,11 @@ type GeoHandler interface {
 }
 
 type GeoHandle struct {
-	GeoServ service.GeoService
 }
 
-func NewGeoHand(GeoServ *service.GeoService) *GeoHandle {
+func NewGeoHand() *GeoHandle {
 
-	return &GeoHandle{GeoServ: *GeoServ}
+	return &GeoHandle{}
 }
 
 // @Summary Search handler
@@ -34,7 +32,7 @@ func NewGeoHand(GeoServ *service.GeoService) *GeoHandle {
 // @Failure 400 {string} string
 // @Router /api/address/search [post]
 func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("handle run")
+	fmt.Println("handle run")
 	var req models.SearchRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -43,8 +41,9 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := os.Getenv("RPC_PROTOCOL")
-	addresses := []*models.Address{}
+	protocol := "rpc"
+	addre := []*models.Address{}
+	var result []byte
 	switch protocol {
 	case "rpc":
 		rpcFactory := rpcClient.NewClientRpcFactory()
@@ -53,7 +52,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
-		addresses = address
+		result = address
 
 	case "json-rpc":
 		jsonrpcFactory := rpcClient.NewJsonRpcClientFactory()
@@ -62,7 +61,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
-		addresses = address
+		addre = address
 
 	case "grpc":
 		grpcFactory := rpcClient.NewGrpcClientFactory()
@@ -71,22 +70,24 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
-		addresses = address
+		addre = address
 
 	default:
 		log.Println("unknown protocol")
 		http.Error(w, "Unsupported Protocol", http.StatusNotImplemented)
 		return
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(addresses)
+	fmt.Println(string(result))
+	//w.Header().Set("Content-Type", "application/json")
+	//json.NewEncoder(w).Encode(result)
+	w.Write(result)
+	/*err = json.NewEncoder(w).Encode(&result)
 	if err != nil {
 		log.Println("err:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
-	}
-
+	}*/
+	fmt.Println(addre)
 }
 
 // @Summary Geocode handler
@@ -100,7 +101,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 // @Failure 400 {string} string
 // @Router /api/address/geocode [post]
 func (h *GeoHandle) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
-	var req models.GeocodeRequest
+	/*var req models.GeocodeRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println("err decoding :", err)
@@ -116,5 +117,5 @@ func (h *GeoHandle) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("err encode :", err)
 		return
-	}
+	}*/
 }

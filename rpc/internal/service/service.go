@@ -1,56 +1,72 @@
 package service
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"rpc/internal/models"
+	"strings"
 )
 
 type GeoProvide struct {
 }
 
-func (g *GeoProvide) SearchGeoAddress(args string) (*[]*models.Address, error) {
-	sreq := models.SearchRequest{Query: args}
-	jsd, _ := json.Marshal(sreq)
+func (g *GeoProvide) SearchGeoAddress(args string) ([]byte, error) {
+	var data = strings.NewReader(fmt.Sprintf("[ \"%s\" ]", args))
 
-	req, err := http.NewRequest("POST", "http://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", bytes.NewBuffer(jsd))
+	req, err := http.NewRequest("POST", "https://cleaner.dadata.ru/api/v1/clean/address", data)
 	if err != nil {
 		log.Fatal("dadata err request:", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Token "+"5086f9aa3d01c20cab4d1477df59cb0f1ab75497:01c3fde0996a6e08e1d51d5203c57cdb211739b2")
-
+	req.Header.Set("Authorization", "Token "+"24133541982a4f8baa0497ac37c7661de6598b13")
+	req.Header.Set("X-Secret", "bbff5cda452ec7ecbf4eea2f3c4e97538e599b46")
 	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal("dadata err request:", err)
 	}
 	defer resp.Body.Close()
-	log.Println(resp.StatusCode)
+	log.Println("dadata statuscode - ", resp.StatusCode)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading body: %v", err)
 	}
 
-	var sugg models.SearchResponse
-	err = json.Unmarshal(body, &sugg)
+	var adr []*models.AddressSearchElement
+	err = json.Unmarshal(body, &adr)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshalling response: %v", err)
 	}
-	reply := &[]*models.Address{}
-	for _, s := range sugg.Suggestions {
-		*reply = append(*reply, s.Data)
+	for _, f := range adr {
+		fmt.Println(f.Result)
 	}
+	var adrs models.AddressSearch
+	res := make([]models.Address, 0)
+	for _, s := range adrs {
+		res = append(res, models.Address(s.Result))
+	}
+	fmt.Println(res)
 
-	return reply, nil
+	return json.Marshal(res)
 }
 
 func (g *GeoProvide) GeocodeAddress() error {
 	//TODO implement me
+	l := &AA{BB: CC{
+		GG:  "",
+		GSD: "",
+	}}
 	return nil
+}
+
+type AA struct {
+	BB CC
+}
+type CC struct {
+	GG  string
+	GSD string
 }
