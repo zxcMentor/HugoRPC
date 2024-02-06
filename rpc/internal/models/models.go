@@ -4,7 +4,13 @@ type SearchRequest struct {
 	Query string `json:"query"`
 }
 
-type AddressSearch []AddressSearchElement
+type AddressSearch []AddressSearchEl
+
+type AddressSearchEl struct {
+	Result string `json:"result"`
+	GeoLat string `json:"geo_lat"`
+	GeoLon string `json:"geo_lon"`
+}
 
 type AddressSearchElement struct {
 	Source               string      `json:"source"`
@@ -116,7 +122,14 @@ type GeocodeResponse struct {
 }
 
 type Suggestion struct {
-	Value             string                 `json:"value"`
-	UnrestrictedValue string                 `json:"unrestricted_value"`
-	Data              map[string]interface{} `json:"data"`
+	Value             string               `json:"value"`
+	UnrestrictedValue string               `json:"unrestricted_value"`
+	Data              AddressSearchElement `json:"data"`
+}
+type Sugg struct {
+	Addresses []Suggestion `json:"addresses"`
+}
+
+type ResponseAddress struct {
+	Addresses []AddressSearchEl `json:"addresses"`
 }

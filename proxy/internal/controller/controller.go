@@ -41,7 +41,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := "json-rpc"
+	protocol := "rpc"
 
 	var result []byte
 	switch protocol {

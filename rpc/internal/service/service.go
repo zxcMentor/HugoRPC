@@ -41,109 +41,15 @@ func (g *GeoProvide) SearchGeoAddress(input string) ([]byte, error) {
 	if err != nil {
 		log.Println("err unmarshal ")
 	}
+	var pr models.ResponseAddress
 
-	var ress models.AddressSearchElement
-	for _, s := range adrs {
-		ress = models.AddressSearchElement{
-			Source:               "",
-			Result:               s.Result,
-			PostalCode:           "",
-			Country:              "",
-			CountryISOCode:       "",
-			FederalDistrict:      "",
-			RegionFiasID:         "",
-			RegionKladrID:        "",
-			RegionISOCode:        "",
-			RegionWithType:       "",
-			RegionType:           "",
-			RegionTypeFull:       "",
-			Region:               "",
-			AreaFiasID:           nil,
-			AreaKladrID:          nil,
-			AreaWithType:         nil,
-			AreaType:             nil,
-			AreaTypeFull:         nil,
-			Area:                 nil,
-			CityFiasID:           nil,
-			CityKladrID:          nil,
-			CityWithType:         nil,
-			CityType:             nil,
-			CityTypeFull:         nil,
-			City:                 nil,
-			CityArea:             "",
-			CityDistrictFiasID:   nil,
-			CityDistrictKladrID:  nil,
-			CityDistrictWithType: "",
-			CityDistrictType:     "",
-			CityDistrictTypeFull: "",
-			CityDistrict:         "",
-			SettlementFiasID:     nil,
-			SettlementKladrID:    nil,
-			SettlementWithType:   nil,
-			SettlementType:       nil,
-			SettlementTypeFull:   nil,
-			Settlement:           nil,
-			StreetFiasID:         "",
-			StreetKladrID:        "",
-			StreetWithType:       "",
-			StreetType:           "",
-			StreetTypeFull:       "",
-			Street:               "",
-			SteadFiasID:          nil,
-			SteadKladrID:         nil,
-			SteadCadnum:          nil,
-			SteadType:            nil,
-			SteadTypeFull:        nil,
-			Stead:                nil,
-			HouseFiasID:          "",
-			HouseKladrID:         "",
-			HouseCadnum:          "",
-			HouseType:            "",
-			HouseTypeFull:        "",
-			House:                "",
-			BlockType:            nil,
-			BlockTypeFull:        nil,
-			Block:                nil,
-			Entrance:             nil,
-			Floor:                nil,
-			FlatFiasID:           "",
-			FlatCadnum:           "",
-			FlatType:             "",
-			FlatTypeFull:         "",
-			Flat:                 "",
-			FlatArea:             "",
-			SquareMeterPrice:     "",
-			FlatPrice:            "",
-			PostalBox:            nil,
-			FiasID:               "",
-			FiasCode:             "",
-			FiasLevel:            "",
-			FiasActualityState:   "",
-			KladrID:              "",
-			CapitalMarker:        "",
-			Okato:                "",
-			Oktmo:                "",
-			TaxOffice:            "",
-			TaxOfficeLegal:       "",
-			Timezone:             "",
-			GeoLat:               s.GeoLat,
-			GeoLon:               s.GeoLon,
-			BeltwayHit:           "",
-			BeltwayDistance:      nil,
-			QcGeo:                0,
-			QcComplete:           0,
-			QcHouse:              0,
-			Qc:                   0,
-			UnparsedParts:        nil,
-			Metro:                nil,
-		}
-	}
-
-	address, err := json.Marshal(ress)
+	pr.Addresses = adrs
+	addresses, err := json.Marshal(pr)
 	if err != nil {
 		log.Println("err marshal :", err)
 	}
-	return address, nil
+
+	return addresses, nil
 }
 
 func (g *GeoProvide) GeocodeAddress(inp *models.GeocodeRequest) ([]byte, error) {
@@ -171,20 +77,23 @@ func (g *GeoProvide) GeocodeAddress(inp *models.GeocodeRequest) ([]byte, error) 
 	if err != nil {
 		log.Println("err unmarshal ", err)
 	}
+	var pr models.Sugg
+	pr.Addresses = adrs.Suggestions
+	/*
+		var ress models.Suggestion
+		for _, s := range adrs.Suggestions {
+			ress = models.Suggestion{
+				Value:             s.Value,
+				UnrestrictedValue: s.UnrestrictedValue,
+				Data:              s.Data,
+			}
 
-	var ress models.Suggestion
-	for _, s := range adrs.Suggestions {
-		ress = models.Suggestion{
-			Value:             s.Value,
-			UnrestrictedValue: s.UnrestrictedValue,
-			Data:              s.Data,
 		}
-
-	}
-
-	address, err := json.Marshal(ress)
+	*/
+	address, err := json.Marshal(pr)
 	if err != nil {
 		log.Println("err marshal :", err)
 	}
+
 	return address, nil
 }
