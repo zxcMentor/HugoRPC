@@ -77,7 +77,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unsupported Protocol", http.StatusNotImplemented)
 		return
 	}
-
+	fmt.Println(string(result))
 	w.Write(result)
 
 }
