@@ -106,13 +106,17 @@ type Metro struct {
 	Name     string  `json:"name"`
 }
 
-type SearchResponse struct {
-	Suggestions []*Suggest `json:"suggestions"`
-}
-type Suggest struct {
-	Value             string                `json:"value"`
-	UnrestrictedValue string                `json:"unrestricted_value"`
-	Data              *AddressSearchElement `json:"data"`
+type GeocodeRequest struct {
+	Lat string `json:"lat"`
+	Lng string `json:"lng"`
 }
 
-type Address string
+type GeocodeResponse struct {
+	Suggestions []Suggestion `json:"suggestions"`
+}
+
+type Suggestion struct {
+	Value             string                 `json:"value"`
+	UnrestrictedValue string                 `json:"unrestricted_value"`
+	Data              map[string]interface{} `json:"data"`
+}

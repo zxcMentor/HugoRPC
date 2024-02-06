@@ -14,7 +14,7 @@ message GeoAddressRequest {
 }
 
 message GeoAddressResponse {
-  repeated Address addresses = 1;
+  bytes data = 1;
 }
 
 message GeocodeRequest {
@@ -23,94 +23,6 @@ message GeocodeRequest {
 }
 
 message GeocodeResponse {
-  repeated Address addresses = 1;
+  bytes data = 1;
 }
 
-message Address {
-  string postal_code = 1;
-  string country = 2;
-  string country_iso_code = 3;
-  string federal_district = 4;
-  string region_fias_id = 5;
-  string region_kladr_id = 6;
-  string region_iso_code = 7;
-  string region_with_type = 8;
-  string region_type = 9;
-  string region_type_full = 10;
-  string region = 11;
-  string area_fias_id = 12;
-  string area_kladr_id = 13;
-  string area_with_type = 14;
-  string area_type = 15;
-  string area_type_full = 16;
-  string area = 17;
-  string city_fias_id = 18;
-  string city_kladr_id = 19;
-  string city_with_type = 20;
-  string city_type = 21;
-  string city_type_full = 22;
-  string city = 23;
-  string city_area = 24;
-  string city_district_fias_id = 25;
-  string city_district_kladr_id = 26;
-  string city_district_with_type = 27;
-  string city_district_type = 28;
-  string city_district_type_full = 29;
-  string city_district = 30;
-  string street_fias_id = 31;
-  string street_kladr_id = 32;
-  string street_with_type = 33;
-  string street_type = 34;
-  string street_type_full = 35;
-  string street = 36;
-  string stead_fias_id = 37;
-  string stead_cadnum = 38;
-  string stead_type = 39;
-  string stead_type_full = 40;
-  string stead = 41;
-  string house_fias_id = 42;
-  string house_kladr_id = 43;
-  string house_cadnum = 44;
-  string house_type = 45;
-  string house_type_full = 46;
-  string house = 47;
-  string block_type = 48;
-  string block_type_full = 49;
-  string block = 50;
-  string entrance = 51;
-  string floor = 52;
-  string flat_fias_id = 53;
-  string flat_cadnum = 54;
-  string flat_type = 55;
-  string flat_type_full = 56;
-  string flat = 57;
-  string flat_area = 58;
-  string square_meter_price = 59;
-  string flat_price = 60;
-  string postal_box = 61;
-  string fias_id = 62;
-  string fias_cadastre_number = 63;
-  string fias_level = 64;
-  string fias_actuality_state = 65;
-  string kladr_id = 66;
-  string geoname_id = 67;
-  string capital_marker = 68;
-  string okato = 69;
-  string oktmo = 70;
-  string tax_office = 71;
-  string tax_office_legal = 72;
-  string timezone = 73;
-  string geo_lat = 74;
-  string geo_lon = 75;
-  string beltway_hit = 76;
-  string beltway_distance = 77;
-  string metro = 78;
-  string divisions = 79;
-  string qc_geo = 80;
-  string qc_complete = 81;
-  string qc_house = 82;
-  repeated string history_values = 83;
-  string unparsed_parts = 84;
-  string source = 85;
-  string qc = 86;
-}

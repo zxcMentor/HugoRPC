@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.12
-// source: proxy/internal/grpcClient/geo.proto
+// source: proxy/internal/rpc/rpcClient/proto/geo.proto
 
 package proto
 
@@ -142,5 +142,5 @@ var GeoService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proxy/internal/grpcClient/geo.proto",
+	Metadata: "proxy/internal/rpc/rpcClient/proto/geo.proto",
 }
