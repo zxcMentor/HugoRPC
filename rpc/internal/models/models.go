@@ -1,15 +1,11 @@
 package models
 
-type SearchRequest struct {
-	Query string `json:"query"`
-}
-
-type AddressSearch []AddressSearchEl
+type AddressSearch []AddressSearchElement
 
 type AddressSearchEl struct {
 	Result string `json:"result"`
-	GeoLat string `json:"geo_lat"`
-	GeoLon string `json:"geo_lon"`
+	GeoLat string `json:"lat"`
+	GeoLon string `json:"lon"`
 }
 
 type AddressSearchElement struct {
@@ -98,7 +94,7 @@ type AddressSearchElement struct {
 	GeoLon               string      `json:"geo_lon"`
 	BeltwayHit           string      `json:"beltway_hit"`
 	BeltwayDistance      interface{} `json:"beltway_distance"`
-	QcGeo                int64       `json:"qc_geo"`
+	QcGeo                string      `json:"qc_geo"`
 	QcComplete           int64       `json:"qc_complete"`
 	QcHouse              int64       `json:"qc_house"`
 	Qc                   int64       `json:"qc"`
@@ -126,8 +122,11 @@ type Suggestion struct {
 	UnrestrictedValue string               `json:"unrestricted_value"`
 	Data              AddressSearchElement `json:"data"`
 }
-type Sugg struct {
-	Addresses []Suggestion `json:"addresses"`
+
+type ResponseGeocode struct {
+	Value             string            `json:"value"`
+	UnrestrictedValue string            `json:"unrestricted_value"`
+	Data              []AddressSearchEl `json:"addresses"`
 }
 
 type ResponseAddress struct {

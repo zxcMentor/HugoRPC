@@ -102,7 +102,7 @@ func (h *GeoHandle) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := "grpc"
+	protocol := "rpc"
 
 	var result []byte
 	switch protocol {

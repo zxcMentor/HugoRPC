@@ -41,9 +41,21 @@ func (g *GeoProvide) SearchGeoAddress(input string) ([]byte, error) {
 	if err != nil {
 		log.Println("err unmarshal ")
 	}
+
 	var pr models.ResponseAddress
 
-	pr.Addresses = adrs
+	for _, s := range adrs {
+
+		prs := []models.AddressSearchEl{{
+			Result: s.Result,
+			GeoLat: s.GeoLat,
+			GeoLon: s.GeoLon,
+		},
+		}
+
+		pr.Addresses = prs
+	}
+
 	addresses, err := json.Marshal(pr)
 	if err != nil {
 		log.Println("err marshal :", err)
@@ -77,19 +89,26 @@ func (g *GeoProvide) GeocodeAddress(inp *models.GeocodeRequest) ([]byte, error) 
 	if err != nil {
 		log.Println("err unmarshal ", err)
 	}
-	var pr models.Sugg
-	pr.Addresses = adrs.Suggestions
-	/*
-		var ress models.Suggestion
-		for _, s := range adrs.Suggestions {
-			ress = models.Suggestion{
-				Value:             s.Value,
-				UnrestrictedValue: s.UnrestrictedValue,
-				Data:              s.Data,
-			}
 
+	var pr models.ResponseGeocode
+
+	for _, v := range adrs.Suggestions {
+		as := []models.AddressSearchEl{
+			{
+				Result: v.Value,
+				GeoLat: v.Data.GeoLat,
+				GeoLon: v.Data.GeoLon,
+			},
 		}
-	*/
+		ps := models.ResponseGeocode{
+			Value:             v.Value,
+			UnrestrictedValue: v.UnrestrictedValue,
+			Data:              as,
+		}
+
+		pr = ps
+	}
+
 	address, err := json.Marshal(pr)
 	if err != nil {
 		log.Println("err marshal :", err)
