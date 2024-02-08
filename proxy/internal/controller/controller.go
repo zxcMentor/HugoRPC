@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"proxy/internal/models"
 	"proxy/internal/rpc/rpcClient"
 )
@@ -41,7 +42,7 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := "rpc"
+	protocol := os.Getenv("RPC_PROTOCOL")
 
 	var result []byte
 	switch protocol {
@@ -102,7 +103,7 @@ func (h *GeoHandle) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := "rpc"
+	protocol := os.Getenv("RPC_PROTOCOL")
 
 	var result []byte
 	switch protocol {

@@ -66,7 +66,7 @@ func (g *GeoService) GeoSearch(input string) ([]byte, error) {
 
 func (g *GeoService) GeoCode(lat, lng string) ([]byte, error) {
 
-	var data = strings.NewReader(fmt.Sprintf("{ \"lat\":%s, \"lon\":%s }", lat, lng)) //(`{ "lat": 55.878, "lon": 37.653 }`)
+	var data = strings.NewReader(fmt.Sprintf("{ \"lat\":%s, \"lon\":%s }", lat, lng))
 	req, err := http.NewRequest("POST", "https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address", data)
 	if err != nil {
 		log.Fatal(err)

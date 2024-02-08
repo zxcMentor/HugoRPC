@@ -37,34 +37,7 @@ func NewReverseProxy(host, port string) *ReverseProxy {
 }
 
 func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
-	//
-	/*
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			var proxyUrl *url.URL
-			var err error
-
-			if !strings.HasPrefix(r.URL.Path, "/api") && !strings.HasPrefix(r.URL.Path, "/swagger") {
-
-				proxyUrl, err = url.Parse(fmt.Sprintf("http://%s:%s", rp.host, rp.port))
-				if err != nil {
-					fmt.Println("url parsing error:", err)
-				}
-
-				proxy := httputil.NewSingleHostReverseProxy(proxyUrl)
-
-				proxy.ServeHTTP(w, r)
-
-				return
-
-			}
-
-			next.ServeHTTP(w, r)
-
-		})
-
-	*/
-	//
 	target, _ := url.Parse(fmt.Sprintf("http://%s:%s", rp.host, rp.port))
 	proxy := httputil.NewSingleHostReverseProxy(target)
 
@@ -76,5 +49,5 @@ func (rp *ReverseProxy) ReverseProxy(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 
 	})
-	//
+
 }

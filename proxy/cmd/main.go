@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	_ "proxy/docs"
@@ -15,10 +14,6 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("err loading env:", err)
-	}
 
 	gh := controller.NewGeoHand()
 	r := router.StRout(gh)

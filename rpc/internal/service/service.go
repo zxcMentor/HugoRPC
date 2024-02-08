@@ -22,15 +22,15 @@ func (g *GeoProvide) SearchGeoAddress(input string) ([]byte, error) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Token "+"24133541982a4f8baa0497ac37c7661de6598b13")
-	req.Header.Set("X-Secret", "bbff5cda452ec7ecbf4eea2f3c4e97538e599b46")
+	req.Header.Set("Authorization", "Token "+"5086f9aa3d01c20cab4d1477df59cb0f1ab75497")
+	req.Header.Set("X-Secret", "01c3fde0996a6e08e1d51d5203c57cdb211739b2")
 	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal("dadata err request:", err)
 	}
 	defer resp.Body.Close()
-	log.Println("dadata statuscode - ", resp.StatusCode)
+	log.Println("dadata status code - ", resp.StatusCode)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading body: %v", err)

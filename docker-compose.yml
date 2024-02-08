@@ -19,6 +19,8 @@ services:
       - "./hugo/content:/app/static"
     ports:
       - "8080:8080"
+    env_file:
+      - ./proxy/.env
     networks:
         - mylocal
   rpc:
