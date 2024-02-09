@@ -18,6 +18,7 @@ import (
 func main() {
 	protocol := os.Getenv("RPC_PROTOCOL")
 	var rpccl rpcClient.ClientFactoryRpc
+
 	switch protocol {
 	case "rpc":
 		rpcFactory := rpcClient.NewClientRpcFactory()
