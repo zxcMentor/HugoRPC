@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"proxy/internal/models"
 	"proxy/internal/rpc/rpcClient"
 )
@@ -16,11 +15,12 @@ type GeoHandler interface {
 }
 
 type GeoHandle struct {
+	cl rpcClient.ClientFactoryRpc
 }
 
-func NewGeoHand() *GeoHandle {
+func NewGeoHand(cl rpcClient.ClientFactoryRpc) *GeoHandle {
 
-	return &GeoHandle{}
+	return &GeoHandle{cl: cl}
 }
 
 // @Summary Search handler
@@ -42,43 +42,12 @@ func (h *GeoHandle) SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := os.Getenv("RPC_PROTOCOL")
-
 	var result []byte
-	switch protocol {
-	case "rpc":
-		rpcFactory := rpcClient.NewClientRpcFactory()
-		address, err := rpcFactory.CreateClientAndCallSearch(req.Query)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	case "json-rpc":
-		jsonrpcFactory := rpcClient.NewJsonRpcClientFactory()
-		address, err := jsonrpcFactory.CreateClientAndCallSearch(req.Query)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	case "grpc":
-		grpcFactory := rpcClient.NewGrpcClientFactory()
-		address, err := grpcFactory.CreateClientAndCallSearch(req.Query)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	default:
-		log.Println("unknown protocol")
-		http.Error(w, "Unsupported Protocol", http.StatusNotImplemented)
-		return
+	address, err := h.cl.CreateClientAndCallSearch(req.Query)
+	if err != nil {
+		log.Println("err:", err)
 	}
-
+	result = address
 	w.Write(result)
 
 }
@@ -103,43 +72,12 @@ func (h *GeoHandle) GeocodeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	protocol := os.Getenv("RPC_PROTOCOL")
-
 	var result []byte
-	switch protocol {
-	case "rpc":
-		rpcFactory := rpcClient.NewClientRpcFactory()
-		address, err := rpcFactory.CreateClientAndCallGeocode(req)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	case "json-rpc":
-		jsonrpcFactory := rpcClient.NewJsonRpcClientFactory()
-		address, err := jsonrpcFactory.CreateClientAndCallGeocode(req)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	case "grpc":
-		grpcFactory := rpcClient.NewGrpcClientFactory()
-		address, err := grpcFactory.CreateClientAndCallGeocode(req)
-		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		result = address
-
-	default:
-		log.Println("unknown protocol")
-		http.Error(w, "Unsupported Protocol", http.StatusNotImplemented)
-		return
+	address, err := h.cl.CreateClientAndCallGeocode(req)
+	if err != nil {
+		log.Println("err:", err)
 	}
-
+	result = address
 	w.Write(result)
 
 }
